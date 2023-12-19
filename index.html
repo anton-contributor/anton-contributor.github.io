@@ -319,16 +319,16 @@
     <br /><br />
     <p>Matérials</p>
     <div class="roomColor" data-type="wood"
-      style="background: url('https://orig00.deviantart.net/e1f2/f/2015/164/8/b/old_oak_planks___seamless_texture_by_rls0812-d8x6htl.jpg');">
+      style="background: url('/img/wood.jpg');">
     </div>
     <div class="roomColor" data-type="tiles"
-      style="background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrkoI2Eiw8ya3J_swhfpZdi_ug2sONsI6TxEd1xN5af3DX9J3R');">
+      style="background: url('/img/tile.jpg');">
     </div>
     <div class="roomColor" data-type="granite"
-      style="background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9_nEMhnWVV47lxEn5T_HWxvFwkujFTuw6Ff26dRTl4rDaE8AdEQ');">
+      style="background: url('/img/granite.jpg');">
     </div>
     <div class="roomColor" data-type="grass"
-      style="background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWh5nEP_Trwo96CJjev6lnKe0_dRdA63RJFaoc3-msedgxveJd');">
+      style="background: url('/img/grass.jpg');">
     </div>
     <div data-type="#ff008a" style="clear:both"></div>
     <br /><br />
@@ -342,7 +342,11 @@
 
   <div id="panel" class="leftBox">
     <ul class="list-unstyled">
-      <li><button class="btn disabled halfy " id="undo" title="undo"><i class="fa fa-chevron-circle-left"
+      <li>
+        <input type="text" id="projectNameInput" class="btn fully " placeholder="Project Name ...">
+      </li>
+      <li>
+        <button class="btn disabled halfy " id="undo" title="undo"><i class="fa fa-chevron-circle-left"
             aria-hidden="true"></i>
           <button class="btn disabled halfy pull-right" id="redo" title="redo"><i class="fa fa-chevron-circle-right"
               aria-hidden="true"></i></button>
@@ -479,8 +483,18 @@
             data-toggle="tooltip" data-placement="right" title="Full screen"><i class="fa fa-compress"
               aria-hidden="true"></i></button>
       <li>
-
-        <div style="clear:both"></div>
+          <div style="clear:both"></div>
+          <li><button class="btn btn-light shadow fully " id="save" onclick="saveProject(JSON.parse(localStorage.getItem('history')));">Save Project</button></li>
+          <li>
+            <input type="file" id="fileInput" class="btn btn-light shadow fully " style="display:none;">
+            <label class="btn btn-light shadow fully " for="fileInput">Open Project</label>
+            <script>
+              document.getElementById('fileInput').addEventListener('change', onFileSelected);
+              function onFileSelected(event) {
+                openProject(event)
+              }
+            </script>
+          </li>
     </ul>
   </div>
 
@@ -488,16 +502,24 @@
     <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-
-          <h4 class="modal-title" id="myModalLabel">Welcome Home Rough Editor v0.95</h4>
+          <h4 class="modal-title" id="myModalLabel">Projects</h4>
         </div>
         <div class="modal-body m-2">
           <div id="recover">
-            <p>A plan exists in historical, would you like recover him ?</p>
             <button class="btn btn-success shadow" data-bs-dismiss="modal"
-              onclick="initHistory('recovery');">YES</button></p>
+              onclick="initHistory('recovery');">Back to last project</button></p>
+          </div>
+          <div id="open">
+              <input type="file" id="openProject" class="btn btn-success shadow" style="display:none;">
+              <label class="btn btn-success shadow" for="openProject" data-bs-dismiss="modal">Open Project</label>
+              <script>
+                document.getElementById('openProject').addEventListener('change', onFileSelected);
+                function onFileSelected(event) {
+                  openProject(event)
+                }
+              </script>
             <hr />
-            <p>Or are you prefer start a new plan ?</p>
+            <p>Create New</p>
           </div>
           <div class="w-100 d-flex justify-content-center  flex-column gap-4 flex-md-row">
             <div class="boxMouseOver"><img src="img/newPlanEmpty.jpg" class="img-fluid" onclick="initHistory();"
@@ -508,10 +530,6 @@
                 data-bs-dismiss="modal" /></div>
           </div>
         </div>
-        <!-- <div class="modal-footer">
-          <button type="button" class="btn btn-light shadow" data-dismiss="modal">CLOSE</button>
-          <button type="button" class="btn btn-primary">YES</button>
-        </div> -->
       </div>
     </div>
   </div>

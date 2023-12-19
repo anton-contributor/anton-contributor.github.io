@@ -42,16 +42,56 @@ let factor = 1;
 // *****************   LOAD / SAVE LOCALSTORAGE      ************************
 // **************************************************************************
 
+function openProject(event) {
+    const fileInput = event.target;
+    const file = fileInput.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Parse the JSON data
+            try {
+                let projectData = JSON.parse(e.target.result);
+                load(projectData.length - 1, "boot", projectData);
+                save("boot");
+
+                console.log('Parsed Project:', projectData);
+            } catch (jsonError) {
+                console.error('Error opening project:', jsonError);
+            }
+        };
+        reader.readAsText(file);
+    }
+}
+function saveProject(content) {
+    console.log('content:', content);
+
+    const jsonString = JSON.stringify(content, null, 2); // The third argument (2) specifies the number of spaces for indentation
+
+    const blob = new Blob([jsonString], { type: 'json' });
+    const link = document.createElement('a');
+
+    const projectNameInput = document.getElementById('projectNameInput');
+
+    link.download = projectNameInput.value + '.json';
+
+    link.href = window.URL.createObjectURL(blob);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 function initHistory(boot = false) {
     HISTORY.index = 0;
-    if (!boot && localStorage.getItem('history')) localStorage.removeItem('history');
-    if (localStorage.getItem('history') && boot === "recovery") {
-        let historyTemp = JSON.parse(localStorage.getItem('history'));
-        load(historyTemp.length - 1, "boot");
+    let historyData = localStorage.getItem('history');
+
+    if (!boot && historyData) localStorage.removeItem('history');
+    if (historyData && boot === "recovery") {
+        let historyTemp = JSON.parse(historyData);
+        load(historyTemp.length - 1, "boot", historyTemp);
         save("boot");
     }
     if (boot === "newSquare") {
-        if (localStorage.getItem('history')) localStorage.removeItem('history');
+        if (historyData) localStorage.removeItem('history');
         HISTORY.push({
             "objData": [],
             "wallData": [{
@@ -128,11 +168,11 @@ function initHistory(boot = false) {
         });
         HISTORY[0] = JSON.stringify(HISTORY[0]);
         localStorage.setItem('history', JSON.stringify(HISTORY));
-        load(0);
+        load(0, JSON.parse(localStorage.getItem('history')));
         save();
     }
     if (boot === "newL") {
-        if (localStorage.getItem('history')) localStorage.removeItem('history');
+        if (historyData) localStorage.removeItem('history');
         HISTORY.push({
             "objData": [],
             "wallData": [{
@@ -235,14 +275,14 @@ function initHistory(boot = false) {
         });
         HISTORY[0] = JSON.stringify(HISTORY[0]);
         localStorage.setItem('history', JSON.stringify(HISTORY));
-        load(0);
+        load(0, JSON.parse(localStorage.getItem('history')));
         save();
     }
 }
 
 document.getElementById('redo').addEventListener("click", function () {
     if (HISTORY.index < HISTORY.length) {
-        load(HISTORY.index);
+        load(HISTORY.index, JSON.parse(localStorage.getItem('history')));
         HISTORY.index++;
         $('#undo').removeClass('disabled');
         if (HISTORY.index === HISTORY.length) {
@@ -256,7 +296,7 @@ document.getElementById('undo').addEventListener("click", function () {
         $('#undo').removeClass('disabled');
         if (HISTORY.index - 1 > 0) {
             HISTORY.index--;
-            load(HISTORY.index - 1);
+            load(HISTORY.index - 1, JSON.parse(localStorage.getItem('history')));
             $('#redo').removeClass('disabled');
         }
     }
@@ -305,15 +345,47 @@ function save(boot = false) {
     return true;
 }
 
-function load(index = HISTORY.index, boot = false) {
+function load(index = HISTORY.index, boot = false, project) {
     if (HISTORY.length === 0 && !boot) return false;
     for (let k in OBJDATA) {
         OBJDATA[k].graph.remove();
     }
     OBJDATA = [];
-    let historyTemp = [];
-    historyTemp = JSON.parse(localStorage.getItem('history'));
-    historyTemp = JSON.parse(historyTemp[index]);
+
+    let historyTemp = JSON.parse(project[index]);
+
+    for (let k in historyTemp.objData) {
+        let OO = historyTemp.objData[k];
+        // if (OO.family === 'energy') OO.family = 'byObject';
+        let obj = new editor.obj2D(OO.family, OO.class, OO.type, {
+            x: OO.x,
+            y: OO.y
+        }, OO.angle, OO.angleSign, OO.size, OO.hinge = 'normal', OO.thick, OO.value);
+        obj.limit = OO.limit;
+        OBJDATA.push(obj);
+        $('#boxcarpentry').append(OBJDATA[OBJDATA.length - 1].graph);
+        obj.update();
+    }
+    WALLS = historyTemp.wallData;
+    for (let k in WALLS) {
+        if (WALLS[k].child != null) {
+            WALLS[k].child = WALLS[WALLS[k].child];
+        }
+        if (WALLS[k].parent != null) {
+            WALLS[k].parent = WALLS[WALLS[k].parent];
+        }
+    }
+    ROOM = historyTemp.roomData;
+    editor.architect(WALLS);
+    editor.showScaleBox();
+    rib();
+}
+function loadProject(... historyTemp) {
+    if (HISTORY.length === 0 && !boot) return false;
+    for (let k in OBJDATA) {
+        OBJDATA[k].graph.remove();
+    }
+    OBJDATA = [];
 
     for (let k in historyTemp.objData) {
         let OO = historyTemp.objData[k];
@@ -721,7 +793,7 @@ window.addEventListener("load", function () {
         document.getElementById('zoomBox').style.transform = "translateX(-165px)";
     });
     if (!localStorage.getItem('history')) {
-        $('#recover').html("<p>Select a plan type.");
+        $('#recover').html("");
     }
     const myModal = new bootstrap.Modal($('#myModal'))
     myModal.show();
@@ -1561,11 +1633,10 @@ function rib(shift = 5) {
 }
 
 function cursor(tool) {
-    if (tool === 'grab') tool =
-        "url('https://wiki.openmrs.org/s/en_GB/7502/b9217199c27dd617c8d51f6186067d7767c5001b/_/images/icons/emoticons/add.png') 8 8, auto";
-    if (tool === 'scissor') tool = "url('https://maxcdn.icons8.com/windows10/PNG/64/Hands/hand_scissors-64.png'), auto";
-    if (tool === 'trash') tool = "url('https://cdn4.iconfinder.com/data/icons/common-toolbar/36/Cancel-32.png'), auto";
-    if (tool === 'validation') tool = "url('https://images.fatguymedia.com/wp-content/uploads/2015/09/check.png'), auto";
+    if (tool === 'grab') tool = "url('/img/add.png') 8 8, auto";
+    if (tool === 'scissor') tool = "url('/img/scissors.png'), auto";
+    if (tool === 'trash') tool = "url('/img/cancel.png'), auto";
+    if (tool === 'validation') tool = "url('/img/check.png'), auto";
     linElement.css('cursor', tool);
 }
 
