@@ -1567,10 +1567,10 @@ function _MOUSEUP(event) {
       save();
     }
     else {
-      action = 0;
-      construc = 0;
-      $('#boxinfo').html('Select mode');
-      fonc_button('select_mode');
+      // action = 0;
+      // construc = 0;
+      // $('#boxinfo').html('Select mode');
+      // fonc_button('select_mode');
       if (typeof (binder) != 'undefined') {
         binder.remove();
         delete binder;
