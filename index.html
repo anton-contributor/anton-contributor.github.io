@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/jpg" href="./icons/favicon.jpg">
     <title>Floor Plan App v0.1</title>
-    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body style="background:#f2eee5;margin:0;padding:0;" ontouchstart='swipe(event)'>
@@ -496,10 +496,13 @@
 <div id="panel" class="leftBox" ontouchstart='recordXY(event)' ontouchmove='detectSwipeLeft(event)'>
     <ul class="list-unstyled">
         <li>
-            <button class="btn disabled halfy " id="undo" title="undo"><i class="fa fa-chevron-circle-left"
-                                                                          aria-hidden="true"></i>
-                <button class="btn disabled halfy pull-right" id="redo" title="redo"><i
-                        class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
+            <button class="btn disabled halfy " id="undo" title="undo">
+                <i class="gg-undo" aria-hidden="true"></i>
+            </button>
+
+            <button class="btn disabled halfy " id="redo" title="redo">
+                <i class="gg-redo" aria-hidden="true"></i>
+            </button>
         </li>
         <li>
             <button class="btn btn-success fully " id="select_mode" style="box-shadow:2px 2px 3px #ccc;"><i
@@ -730,35 +733,36 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Floor Plan App v0.1</h4>
+                <h4 class="modal-title" id="myModalLabepull-rightl">Floor Plan App v0.1</h4>
             </div>
             <div class="modal-body">
                 <div id="recover">
-                    <p>A plan exists in history, would you like recover it ?</p>
-                    <button class="btn btn-default" onclick="initHistory('recovery');">RESTORE DATA</button>
+                    <p>Restore Previous Project</p>
+                    <button class="btn btn-default" onclick="initHistory('recovery');">RESTORE</button>
                     <hr/>
-                    <p>Or prefer to start a new plan ?</p>
+                    <p>New Project</p>
                 </div>
                 <div class="row">
                     <div class="col-md-3 col-xs-3 boxMouseOver"
-                         style="min-height:140px;margin:15px;background:url('newPlanEmpty.jpg')"><img
-                            src="newPlanEmpty.jpg" class="img-responsive" onclick="initHistory();"/></div>
+                         style="min-height:140px;margin:15px;background:url('icons/newPlanEmpty.jpg')"><img
+                            src="icons/newPlanEmpty.jpg" class="img-responsive" onclick="initHistory();"/></div>
                     <div class="col-md-3 col-xs-3 boxMouseOver"
-                         style="min-height:140px;margin:15px;background:url('newPlanEmpty.jpg')"><img
-                            src="newPlanSquare.jpg" class="img-responsive" style="margin-top:10px"
+                         style="min-height:140px;margin:15px;background:url('icons/newPlanEmpty.jpg')"><img
+                            src="icons/newPlanSquare.jpg" class="img-responsive" style="margin-top:10px"
                             onclick="initHistory('newSquare');"/></div>
                     <div class="col-md-3 col-xs-3 boxMouseOver"
-                         style="min-height:140px;margin:15px;background:url('newPlanEmpty.jpg')"><img src="newPlanL.jpg"
-                                                                                                      class="img-responsive"
-                                                                                                      style="margin-top:20px"
-                                                                                                      onclick="initHistory('newL');"/>
+                         style="min-height:140px;margin:15px;background:url('icons/newPlanEmpty.jpg')"><img
+                            src="icons/newPlanL.jpg"
+                            class="img-responsive"
+                            style="margin-top:20px"
+                            onclick="initHistory('newL');"/>
                     </div>
                 </div>
                 <hr/>
                 <div id="import">
-                    <p>Or Import Plan Data (.json)</p>
+                    <p>Open Project (.json)</p>
                     <input type="file" id="importfile" class="btn btn-default" style="display:inline-block;"/>
-                    <button class="btn btn-default" onclick="importPlan()">IMPORT</button>
+                    <button class="btn btn-default" onclick="importPlan()">LOAD</button>
                 </div>
             </div>
         </div>
@@ -872,13 +876,13 @@
 
 
 </body>
-<script src="jquery.min.js"></script>
-<script src="bootstrap.min.js"></script>
-<script src="mousewheel.js"></script>
-<script src="func.js"></script>
-<script src="qSVG.js"></script>
-<script src="editor.js"></script>
-<script src="engine.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/mousewheel.js"></script>
+<script src="js/func.js"></script>
+<script src="js/qSVG.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/engine.js"></script>
 
 <script>
     if (screen.width <= 768) {
