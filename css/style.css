@@ -13,6 +13,13 @@ h2 {
   font-size:1.4em;
 }
 
+.red-dot {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+}
 
 .color {
   width:30px;
