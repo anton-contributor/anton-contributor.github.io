@@ -3,8 +3,8 @@ WALLS = [];
 OBJDATA = [];
 ROOM = [];
 HISTORY = [];
-BACKUP_HISTORY = [];
 NOTES = [];
+BACKUP_HISTORY = [];
 FLOORS = 1;
 current_active_floor = 0; // start from 0
 wallSize = 20;
@@ -817,16 +817,25 @@ function load(index = HISTORY.index, boot = false, runtimeFloors = false) {
     }
     OBJDATA = [];
     var historyTemp = [];
+    // historyTemp = JSON.parse(localStorage.getItem('history'));
+    // console.log(historyTemp)
+    // historyTemp = JSON.parse(historyTemp[index]);
     if (index || index == 0 || !HISTORY.index) {
+        // console.log(HISTORY)
         if (isNaN(index)) {
             index = 0;
         }
+        // console.log(index)
         historyTemp = JSON.parse(HISTORY[index]);
     } else {
+        // console.log(HISTORY)
+        // console.log(index)
         historyTemp = JSON.parse(HISTORY[(HISTORY.index < HISTORY.length ? HISTORY.index : HISTORY.index - 1)]);
     }
+    // console.log(historyTemp)
     var floors = historyTemp.floors;
     historyTemp = historyTemp.data[current_active_floor];
+    // console.log(historyTemp)
 
     // IF NO HISTORY TEMP FOR IS EMPTY (e.g. NO CASE OF NEW ADDED FLOOR)
     if (!historyTemp) {
@@ -2439,49 +2448,34 @@ document.addEventListener("fullscreenchange", function () {
 function raz_button() {
     $('#rect_mode').removeClass('btn-success');
     $('#rect_mode').addClass('btn-default');
-
     $('#select_mode').removeClass('btn-success');
     $('#select_mode').addClass('btn-default');
-
     $('#line_mode').removeClass('btn-success');
     $('#line_mode').addClass('btn-default');
-
     $('#note_mode').removeClass('btn-success');
     $('#note_mode').addClass('btn-default');
-
     $('#partition_mode').removeClass('btn-success');
     $('#partition_mode').addClass('btn-default');
-
     $('#door_mode').removeClass('btn-success');
     $('#door_mode').addClass('btn-default');
-
     $('#node_mode').removeClass('btn-success');
     $('#node_mode').addClass('btn-default');
-
     $('#text_mode').removeClass('btn-success');
     $('#text_mode').addClass('btn-default');
-
     $('#room_mode').removeClass('btn-success');
     $('#room_mode').addClass('btn-default');
-
     $('#distance_mode').removeClass('btn-success');
     $('#distance_mode').addClass('btn-default');
-
     $('#object_mode').removeClass('btn-success');
     $('#object_mode').addClass('btn-default');
-
     $('#beam').removeClass('btn-success');
     $('#beam').addClass('btn-default');
-
     $('#column').removeClass('btn-success');
     $('#column').addClass('btn-default');
-
     $('#slab').removeClass('btn-success');
     $('#slab').addClass('btn-default');
-
     $('#roof').removeClass('btn-success');
     $('#roof').addClass('btn-default');
-
     $('#stair_mode').removeClass('btn-success');
     $('#stair_mode').addClass('btn-default');
 }
@@ -2518,6 +2512,14 @@ $('#room_mode').click(function () {
     fonc_button('room_mode');
 });
 
+$('#note_mode').click(function () {
+    $('#lin').css('cursor', 'crosshair');
+    $('#boxinfo').html('Add notes');
+    multi = 0;
+    action = 0;
+    fonc_button('note_mode');
+});
+
 $('#select_mode').click(function () {
     $('#boxinfo').html('Select Mode');
     if (typeof (binder) != 'undefined') {
@@ -2532,18 +2534,14 @@ $('#select_mode').click(function () {
 
 $('#line_mode').click(function () {
     $('#lin').css('cursor', 'crosshair');
-    $('#boxinfo').html('Wall(s) creation mode');
+    $('#boxinfo').html('Wall(s) creation');
     multi = 0;
     action = 0;
+    // snap = calcul_snap(event, grid_snap);
+    //
+    // pox = snap.x;
+    // poy = snap.y;
     fonc_button('line_mode');
-});
-
-$('#note_mode').click(function () {
-    $('#lin').css('cursor', 'crosshair');
-    $('#boxinfo').html('Add notes');
-    multi = 0;
-    action = 0;
-    fonc_button('note_mode');
 });
 
 

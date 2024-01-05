@@ -658,25 +658,26 @@ document.addEventListener("keydown", function(event) {
       detectWallStuff();
     } // END mode == 'select_mode' && drag == 'off'
 
-     // ----------------------------- NOTES MODE ------------------------------------------------------
-     if (mode == 'note_mode') {
-         var click = calcul_snap(event, 'off');
-         var clickPositionX = click.x;
-         var clickPositionY = click.y;
+      // ----------------------------- NOTES MODE ------------------------------------------------------
+      if (mode == 'note_mode') {
+          var click = calcul_snap(event, 'off');
+          var clickPositionX = click.x;
+          var clickPositionY = click.y;
 
-         NOTES.push({x: clickPositionX, y: clickPositionY, records: []})
+          NOTES.push({x: clickPositionX, y: clickPositionY, records: []})
 
-         const dotContainer = document.getElementById('dotContainer');
-         const redDot = document.createElement('div');
+          const dotContainer = document.getElementById('dotContainer');
+          const redDot = document.createElement('div');
 
-         redDot.className = 'red-dot';
-         redDot.style.left = `${clickPositionX-200}px`;  // Adjust for half of the dot's width
-         redDot.style.top = `${clickPositionY}px`;
+          redDot.className = 'red-dot';
+          redDot.style.left = `${clickPositionX-200}px`;  // Adjust for half of the dot's width
+          redDot.style.top = `${clickPositionY}px`;
 
-         dotContainer.appendChild(redDot);
+          dotContainer.appendChild(redDot);
 
-         console.log(NOTES)
-     }
+          console.log(NOTES)
+      }
+
     // ------------------------------  LINE MODE ------------------------------------------------------
 
     if ((mode == 'line_mode' || mode == 'partition_mode') && action == 0) {
@@ -707,8 +708,7 @@ document.addEventListener("keydown", function(event) {
                 });
             }
             intersectionOff();
-        }
-        else {
+        } else {
             if (!helpConstruc) cursor('crosshair');
             if (typeof(binder) != "undefined") {
               if (binder.graph) binder.graph.remove();
