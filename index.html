@@ -111,7 +111,9 @@
     <g id="boxDebug"></g>
 </svg>
 
-<div id="areaValue"></div>
+<div id="areaValue">
+    <div id="dotContainer"></div>
+</div>
 
 <div id="reportTools" class="leftBox" style="width:500px;overflow-y: scroll;overflow-x: hidden">
     <h2><i class="fa fa-calculator" aria-hidden="true"></i> Report plan.</h2>
@@ -524,12 +526,10 @@
                     class="fa fa-2x fa-mouse-pointer" aria-hidden="true"></i></button>
         </li>
         <li>
-            <button class="btn btn-default fully " style="margin-bottom:0px" id="line_mode" data-toggle="tooltip"
-                    data-placement="right" title="Make walls">WALL
-            </button>
-            <button class="btn btn-default fully " style="margin-bottom:0px" id="partition_mode" data-toggle="tooltip"
-                    data-placement="right" title="Make partitions wall">PARTITION
-            </button>
+            <button class="btn btn-default fully " style="margin-bottom:0px" id="line_mode" data-toggle="tooltip" data-placement="right" title="Make walls">WALL</button>
+            <button class="btn btn-default fully " style="margin-bottom:0px" id="partition_mode" data-toggle="tooltip" data-placement="right" title="Make partitions wall">PARTITION</button>
+            <button class="btn btn-default fully " style="margin-bottom:0px" id="note_mode" data-toggle="tooltip" data-placement="right" title="Add note">NOTES</button>
+
             <div class="funkyradio" style="font-size:0.8em">
                 <div class="funkyradio-success">
                     <input type="checkbox" id="multi" checked/>
